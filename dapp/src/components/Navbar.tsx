@@ -61,7 +61,7 @@ export function Navbar({ onOpenProfile, minimal }: NavbarProps) {
   const topBar = (
     <header className="fixed top-0 left-0 right-0 z-50 pt-safe bg-black/80 backdrop-blur-md border-b border-white/5">
       <div className="flex items-center justify-between px-4 py-3 max-w-lg mx-auto">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Image
             src="/focus-egg-v2.png"
             width={26}
@@ -69,7 +69,7 @@ export function Navbar({ onOpenProfile, minimal }: NavbarProps) {
             alt=""
             className="rounded-full"
           />
-          <span className="font-display text-sm uppercase tracking-wide text-white">
+          <span className="font-display text-sm font-bold tracking-wide text-white">
             NimPet
           </span>
         </div>
