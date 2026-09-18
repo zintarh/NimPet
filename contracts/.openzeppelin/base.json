@@ -1,0 +1,325 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0x84217d67b85Ef028bb32B494B7477Ab8E9b2fEcd",
+      "txHash": "0xed5929e30cc7c56d714a147d48c8249f033fff0187a31ad0f9e801a873c68a37",
+      "kind": "uups"
+    }
+  ],
+  "impls": {
+    "ec3a915a05d01c73e201c22c12c5c87fd0fcfd676cd5414b3d43e95f0c52fcf9": {
+      "address": "0x8698Ae98A3ba863dA4EC3C941739f124B1fd83Da",
+      "txHash": "0x2b1799652ad3963424fe140eaec6152ded2c1e79ec612d224d6ba598e44c3cd8",
+      "layout": {
+        "solcVersion": "0.8.34",
+        "storage": [
+          {
+            "label": "pets",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_address,t_struct(Pet)1827_storage)",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:25"
+          },
+          {
+            "label": "usdc",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_contract(IERC20)1095",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:27"
+          },
+          {
+            "label": "usedNimTx",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_mapping(t_bytes32,t_bool)",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:52"
+          },
+          {
+            "label": "ownedCosmetics",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "isCosmeticEquipped",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "totalUsers",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "totalFocusSessions",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "totalGlobalFocusTime",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "treasury",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "usernameToAddress",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_mapping(t_string_memory_ptr,t_address)",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "totalVolumeUSDC",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "totalVolumeNIM",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_uint256",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "discountBps",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_uint256",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          },
+          {
+            "label": "discountEndTime",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_uint256",
+            "contract": "Focusling",
+            "src": "contracts/Focusling.sol:533"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)264_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)14_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IERC20)1095": {
+            "label": "contract IERC20",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))": {
+            "label": "mapping(address => mapping(string => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(Pet)1827_storage)": {
+            "label": "mapping(address => struct Focusling.Pet)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_bool)": {
+            "label": "mapping(bytes32 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_string_memory_ptr,t_address)": {
+            "label": "mapping(string => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_string_memory_ptr,t_bool)": {
+            "label": "mapping(string => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_string_memory_ptr": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Pet)1827_storage": {
+            "label": "struct Focusling.Pet",
+            "members": [
+              {
+                "label": "xp",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "health",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "lastInteraction",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "birthTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "username",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "petName",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "streak",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "lastDailySession",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "7"
+              },
+              {
+                "label": "boostEndTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "8"
+              },
+              {
+                "label": "shieldCount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "9"
+              },
+              {
+                "label": "activeCosmetic",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "10"
+              },
+              {
+                "label": "totalFocusTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "11"
+              }
+            ],
+            "numberOfBytes": "384"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin/contracts/proxy/utils/Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts/proxy/utils/Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

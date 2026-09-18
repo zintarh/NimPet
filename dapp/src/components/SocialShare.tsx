@@ -1,0 +1,42 @@
+"use client";
+
+import React, { useState } from "react";
+import { Share2 } from "lucide-react";
+import { ShareModal } from "./ShareModal";
+
+interface SocialShareProps {
+  text: string;
+  url?: string;
+  className?: string;
+}
+
+export function SocialShare({
+  text,
+  url = "https://app.focusling.app",
+  className = "",
+}: SocialShareProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsOpen(true);
+        }}
+        className={`flex items-center justify-center w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-600 hover:text-white dark:hover:bg-green-600 dark:hover:text-white transition-all active:scale-90 ${className}`}
+        title="Share Achievement"
+      >
+        <Share2 size={13} />
+      </button>
+
+      <ShareModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        text={text}
+        url={url}
+      />
+    </>
+  );
+}

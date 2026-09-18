@@ -1,0 +1,153 @@
+import { NextResponse } from "next/server";
+import { fetchCompetitionActivities, fetchUserBaselinesById } from "@/lib/subgraph";
+import { COMPETITION, calcPoints } from "@/config/competition";
+
+// Cache the response at the Vercel CDN for 5 minutes — shared across ALL
+// function instances (unlike module-level variables which are per-instance).
+export const revalidate = 300;
+
+export type CompetitionEntry = {
+  rank: number;
+  address: string;
+  username: string;
+  petName: string;
+  compXp: number;
+  compFocusTime: number;
+  compSessions: number;
+  compStreak: number;
+  points: number;
+};
+
+// Returns the longest consecutive run of active days within the competition window.
+function calcStreak(activeDayTimestamps: number[]): number {
+  if (activeDayTimestamps.length === 0) return 0;
+
+  const DAY = 86400;
+  const sorted = [...new Set(activeDayTimestamps)].sort((a, b) => a - b);
+
+  let best = 1;
+  let current = 1;
+
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] - sorted[i - 1] === DAY) {
+      current++;
+      best = Math.max(best, current);
+    } else {
+      current = 1;
+    }
+  }
+
+  return best;
+}
+
+async function buildLeaderboard(): Promise<CompetitionEntry[]> {
+  // Pass 1: only competition days (May 4–8)
+  const activities = await fetchCompetitionActivities(
+    COMPETITION.startDayTs,
+    COMPETITION.endDayTs,
+  );
+
+  // Group by user
+  type UserBucket = {
+    address: string;
+    username: string;
+    petName: string;
+    baselineDate: number;
+    baseline: { xp: number; focusTime: number; sessions: number } | null;
+    compDays: { date: number; xp: number; focusTime: number; sessions: number }[];
+  };
+
+  const buckets = new Map<string, UserBucket>();
+
+  for (const act of activities) {
+    const userId = act.user.id.toLowerCase();
+    if (!buckets.has(userId)) {
+      buckets.set(userId, {
+        address: act.user.address,
+        username: act.user.username,
+        petName: act.user.petName,
+        baselineDate: 0,
+        baseline: null,
+        compDays: [],
+      });
+    }
+
+    const bucket = buckets.get(userId)!;
+    const date = Number(act.date);
+    const xp = Number(act.xp);
+    const focusTime = Number(act.focusTime);
+    const sessions = Number(act.totalSessions ?? 0);
+
+    if (date >= COMPETITION.startDayTs && date <= COMPETITION.endDayTs) {
+      bucket.compDays.push({ date, xp, focusTime, sessions });
+    }
+  }
+
+  // Pass 2: fetch pre-competition baselines by entity ID.
+  // Relationship-field filtering is broken in specVersion 0.0.5, so we construct
+  // DailyActivity IDs directly ("{userId}-{dayTimestamp}") and query via id_in.
+  const competitionUserIds = [...buckets.entries()]
+    .filter(([, b]) => b.compDays.length > 0)
+    .map(([userId]) => userId);
+
+  if (competitionUserIds.length > 0) {
+    const baselines = await fetchUserBaselinesById(competitionUserIds, COMPETITION.startDayTs);
+    let foundCount = 0;
+    for (const userId of competitionUserIds) {
+      const baseline = baselines.get(userId);
+      if (baseline) {
+        foundCount++;
+        buckets.get(userId)!.baseline = baseline;
+      }
+    }
+    console.log(`[competition] baselines: ${foundCount}/${competitionUserIds.length} users have pre-comp data`);
+  }
+
+  // Build entries — only include users with at least 1 comp session
+  const entries: CompetitionEntry[] = [];
+
+  for (const [, bucket] of buckets) {
+    if (bucket.compDays.length === 0) continue;
+
+    // Sort ascending by date so lastDay is always the latest snapshot
+    bucket.compDays.sort((a, b) => a.date - b.date);
+    const lastDay = bucket.compDays[bucket.compDays.length - 1];
+    const base = bucket.baseline ?? { xp: 0, focusTime: 0, sessions: 0 };
+
+    const compXp = Math.max(0, lastDay.xp - base.xp);
+    const compFocusTime = Math.max(0, lastDay.focusTime - base.focusTime);
+    const compSessions = Math.max(0, lastDay.sessions - base.sessions);
+    const compStreak = calcStreak(bucket.compDays.map((d) => d.date));
+
+    entries.push({
+      rank: 0,
+      address: bucket.address,
+      username: bucket.username,
+      petName: bucket.petName,
+      compXp,
+      compFocusTime,
+      compSessions,
+      compStreak,
+      points: calcPoints(compXp, compStreak, compSessions),
+    });
+  }
+
+  // Sort by points descending, assign ranks, cap at 100
+  entries.sort((a, b) => b.points - a.points);
+  entries.forEach((e, i) => { e.rank = i + 1; });
+
+  return entries.slice(0, 100);
+}
+
+export async function GET() {
+  try {
+    const entries = await buildLeaderboard();
+    return NextResponse.json({ entries, cachedAt: Date.now() });
+  } catch (err: any) {
+    console.error("[competition/leaderboard]", err);
+    return NextResponse.json(
+      { error: "Failed to load competition leaderboard" },
+      { status: 500 },
+    );
+  }
+}

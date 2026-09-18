@@ -1,0 +1,37 @@
+specVersion: 0.0.5
+description: Focusling — on-chain productivity game on Base. Indexes pet state, leaderboard, and names.
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Focusling
+    network: base
+    source:
+      address: "0x84217d67b85Ef028bb32B494B7477Ab8E9b2fEcd"
+      abi: Focusling
+      startBlock: 51431292
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - GlobalStats
+        - DailyActivity
+      abis:
+        - name: Focusling
+          file: ./abis/Focusling.json
+      eventHandlers:
+        - event: PetBorn(indexed address)
+          handler: handlePetBorn
+        - event: PetFed(indexed address,uint256,uint256)
+          handler: handlePetFed
+        - event: FocusSessionRecorded(indexed address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleFocusSessionRecorded
+        - event: NamesUpdated(indexed address,string,string)
+          handler: handleNamesUpdated
+        - event: UserDeleted(indexed address)
+          handler: handleUserDeleted
+        - event: PetMigrated(indexed address,indexed address)
+          handler: handlePetMigrated
+      file: ./src/focusling.ts
