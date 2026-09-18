@@ -71,6 +71,13 @@ export const FocusTimer = forwardRef<FocusTimerHandle, FocusTimerProps>(function
   const [status, setStatus] = useState<TimerState>("idle");
   const [duration, setDuration] = useState(initialMinutes * 60);
   const [note, setNote] = useState("");
+  // A session that finished while the app was backgrounded/closed needs a
+  // real tap before recording it — onComplete leads to a wallet signing
+  // request, and Nimiq Pay (like most wallets) can silently ignore a
+  // signing prompt that isn't tied to a direct user gesture, leaving the
+  // request hanging forever. Set instead of auto-firing onComplete so the
+  // eventual write is genuinely gesture-triggered.
+  const [pendingAwayCompletion, setPendingAwayCompletion] = useState<number | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const endTimeRef = useRef<number | null>(null);
@@ -110,11 +117,11 @@ export const FocusTimer = forwardRef<FocusTimerHandle, FocusTimerProps>(function
             // after a tab-switch re-mount and the UI flickers incorrectly.
             onStart?.(n);
           } else {
-            // Session finished while away
+            // Session finished while away — don't auto-submit (see
+            // pendingAwayCompletion above). Require a tap instead.
             setTimeLeft(0);
             setStatus("completed");
-            // Trigger completion after a short delay to ensure parent is ready
-            setTimeout(() => onComplete?.(d / 60), 500);
+            setPendingAwayCompletion(d / 60);
           }
         } else if (s === "paused") {
           // Keep paused state but don't resume automatically
@@ -304,9 +311,27 @@ export const FocusTimer = forwardRef<FocusTimerHandle, FocusTimerProps>(function
                 <p className="text-white font-semibold text-lg">
                   Session Complete!
                 </p>
-                <p className="text-neutral-500 text-xs mt-1">
-                  Great work. Back in a moment…
-                </p>
+                {pendingAwayCompletion === null ? (
+                  <p className="text-neutral-500 text-xs mt-1">
+                    Great work. Back in a moment…
+                  </p>
+                ) : (
+                  <>
+                    <p className="text-neutral-500 text-xs mt-1 mb-4">
+                      This finished while you were away — tap to record it.
+                    </p>
+                    <button
+                      onClick={() => {
+                        const minutes = pendingAwayCompletion;
+                        setPendingAwayCompletion(null);
+                        onComplete?.(minutes);
+                      }}
+                      className="px-8 py-3 rounded-full bg-[#2E7D32] hover:bg-[#256B29] text-white font-semibold text-sm transition-all active:scale-[0.98]"
+                    >
+                      Record Session
+                    </button>
+                  </>
+                )}
               </motion.div>
             </div>
           )}
