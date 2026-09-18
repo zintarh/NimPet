@@ -773,39 +773,6 @@ function AppPageContent() {
               : `${formatRemaining(nextStageInfo.remaining)} of focus to unlock ${getStageName(nextStageInfo.nextStage)}`}
           </p>
 
-          <div className="flex items-center gap-2">
-            {(() => {
-              const boostActive =
-                boostEndTime > Math.floor(Date.now() / 1000) ||
-                shieldCount > 0;
-              return (
-                <button
-                  onClick={() => setIsBoostsOpen(true)}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium whitespace-nowrap"
-                  style={
-                    boostActive
-                      ? {
-                        background:
-                          "linear-gradient(90deg, #0F3D1A, #2E7D32, #0F3D1A)",
-                        color: "#ffffff",
-                      }
-                      : { background: "#ffffff", color: "#000000" }
-                  }
-                >
-                  {boostActive ? (
-                    <span className="flex items-center gap-2">
-                      <FastForward size={14} fill="#A5D6A7" color="#A5D6A7" />
-                      Boosts
-                    </span>
-                  ) : (
-                    "Boosts"
-                  )}
-                </button>
-              );
-            })()}
-
-            <InviteButton className="flex-1 justify-center" />
-          </div>
         </div>
 
         {/* ── Focus timer — full-width, the dominant card ─────────────────── */}
@@ -881,6 +848,41 @@ function AppPageContent() {
             {/* Sentinel lives inside the timer div — guaranteed visible when timer is */}
             <div ref={setTimerSentinel} className="h-px" />
           </div>
+        </div>
+
+        {/* Boosts + Invite — below the timer so the timer gets top priority */}
+        <div className="flex items-center gap-2 mt-4">
+          {(() => {
+            const boostActive =
+              boostEndTime > Math.floor(Date.now() / 1000) ||
+              shieldCount > 0;
+            return (
+              <button
+                onClick={() => setIsBoostsOpen(true)}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium whitespace-nowrap"
+                style={
+                  boostActive
+                    ? {
+                      background:
+                        "linear-gradient(90deg, #0F3D1A, #2E7D32, #0F3D1A)",
+                      color: "#ffffff",
+                    }
+                    : { background: "#ffffff", color: "#000000" }
+                }
+              >
+                {boostActive ? (
+                  <span className="flex items-center gap-2">
+                    <FastForward size={14} fill="#A5D6A7" color="#A5D6A7" />
+                    Boosts
+                  </span>
+                ) : (
+                  "Boosts"
+                )}
+              </button>
+            );
+          })()}
+
+          <InviteButton className="flex-1 justify-center" />
         </div>
 
         {/* Nimiq Pay required footer links */}
