@@ -40,18 +40,19 @@ Sessions started between midnight and 6 AM receive a 1.1x XP multiplier.
 
 ## Shop
 
-NIM is the default, first-class payment method — every purchase is confirmed directly through Nimiq Pay's own native dialog, no separate wallet popup. USDC on Base is available as an equal alternative, one tap away via an in-shop currency toggle.
+**NIM is the default, first-class payment method** in the shop — it's the currency selected by default, and every purchase is confirmed directly through Nimiq Pay's own native dialog, with no separate wallet popup. USDC on Base is available as an equal alternative, one tap away via an in-shop currency toggle.
 
-| Item         | USDC Price | Effect                                      |
-| ------------ | ---------- | -------------------------------------------- |
-| Food         | $0.10      | Restores pet health                         |
-| Super Food   | $0.25      | Restores full health                        |
-| Energy Drink | $0.20      | Activates a 2x XP boost for 24 hours        |
-| Shield       | $0.50      | Protects streak from one missed day         |
-| Revive       | $0.25      | Brings a dead pet (0% health) back to life  |
-| Cosmetics    | varies     | Equippable items displayed on the pet view  |
+| Item         | NIM Price   | USDC Price | Effect                                      |
+| ------------ | ----------- | ---------- | -------------------------------------------- |
+| Food         | 5 NIM       | $0.10      | Restores pet health                         |
+| Super Food   | 5 NIM       | $0.25      | Restores full health                        |
+| Energy Drink | 5 NIM       | $0.20      | Activates a 2x XP boost for 24 hours        |
+| Shield       | 25 NIM      | $0.50      | Protects streak from one missed day         |
+| Revive       | 1,000 NIM   | $0.25      | Brings a dead pet (0% health) back to life  |
+| Cool Shades  | 10 NIM      | $0.50      | Equippable cosmetic                         |
+| Royal Crown  | 5 NIM       | $5.00      | Equippable cosmetic — legendary tier        |
 
-NIM prices are set independently per item in `dapp/src/hooks/useFocusling.tsx` and `dapp/src/app/app/shop/page.tsx` — check there for current values, as they may be temporarily adjusted for demo/testing purposes.
+NIM prices are defined in `dapp/src/hooks/useFocusling.tsx` (consumables/boosts/revive) and `dapp/src/app/app/shop/page.tsx` (cosmetics) — several are currently reduced from their intended long-term values so testers don't need much NIM to try every feature; each temporary value is commented with what it reverts to.
 
 ### Gas faucet
 

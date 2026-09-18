@@ -183,7 +183,9 @@ export default function ShopPage() {
         action: () => buySuperFoodWithUSDC(),
         disabled: health >= 100,
         disabledLabel: health >= 100 ? "Health Full" : undefined,
-        nimPriceLuna: 1_200_000, // 12 NIM
+        // Must match PRICE_SUPER_FOOD_NIM in useFocusling.tsx — this is
+        // display-only, the actual charge comes from that constant.
+        nimPriceLuna: 500_000, // 5 NIM
         nimAction: () => buySuperFoodWithNIM(),
       },
     ],
@@ -200,7 +202,9 @@ export default function ShopPage() {
         action: () => buyEnergyDrinkWithUSDC(),
         disabled: isBoostActive,
         disabledLabel: isBoostActive ? "Boost Active" : undefined,
-        nimPriceLuna: 1_000_000, // 10 NIM
+        // Must match PRICE_ENERGY_DRINK_NIM in useFocusling.tsx — this is
+        // display-only, the actual charge comes from that constant.
+        nimPriceLuna: 500_000, // 5 NIM
         nimAction: () => buyEnergyDrinkWithNIM(),
       },
       {
