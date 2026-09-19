@@ -281,7 +281,7 @@ export default function ShopPage() {
     ],
   };
 
-  const CATEGORIES: Category[] = ["consumables", "boosts", "cosmetics"];
+  const CATEGORIES: Category[] = ["cosmetics", "boosts", "consumables"];
 
   return (
     <div className="min-h-screen bg-black text-white">

@@ -255,15 +255,10 @@ function AppPageContent() {
 
   const { playSound } = useAudio();
 
-  useEffect(() => {
-    const hasSeen = localStorage.getItem("focus-pet-onboarding");
-    if (!hasSeen) {
-      setShowOnboarding(true);
-    }
-  }, []);
-
+  // Onboarding no longer auto-opens — it added an extra forced step between
+  // connecting and the "Get pet" screen. It's still reachable manually via
+  // the "How does this work?" link.
   const handleCloseOnboarding = () => {
-    localStorage.setItem("focus-pet-onboarding", "true");
     setShowOnboarding(false);
   };
 
